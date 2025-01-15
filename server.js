@@ -49,3 +49,6 @@ io.on("connection", (socket) => {
 server.listen(8000, () => {
   console.log("Server is running on http://localhost:8080");
 });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
