@@ -25,12 +25,12 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
-  socket.on("upload-speed-test", (data) => {
-    const startTime = Date.now();
-    const chunkSize = data?.byteLength || data?.length ||0; // Size of the data received
-    // Simulate upload by echoing the data 
-    console.log(chunkSize,"chunkSize")
-    socket.emit("upload-speed-response", { startTime, chunkSize });
+  socket.on("upload-test", (data) => {
+    const receivedSize = Buffer.byteLength(data, "utf8"); // Get the string size in bytes
+    console.log(`Received ${receivedSize / 1024} KB from ${socket.id}`);
+
+    // Send back the data to test download speed
+    socket.emit("download-test", data);
   });
 
   socket.on("download-speed-test", () => {
