@@ -48,25 +48,18 @@ io.on("connection", (socket) => {
   socket.on("reconnect", (attemptNumber) => {
     console.log(`Client reconnected on attempt ${attemptNumber}:`, socket.id);
   });
+  let receivedSize = 0;
 
-  io.on("connection", (socket) => {
   socket.on("upload-chunk", (chunk) => {
     receivedSize += chunk.length;
   });
 
   socket.on("upload-complete", () => {
-    console.log(`Total Received Size: ${receivedSize} bytes`);
-    socket.emit("upload-success", { receivedSize });
+    let x = receivedSize;
+    receivedSize = 0;
+    console.log(`Total Received Size: ${x} bytes`);
+    socket.emit("upload-success", { x });
   });
-    let receivedSize = 0;
-    socket.on("upload-chunk", (chunk) => {
-      receivedSize += chunk.length;
-    });
-  ga
-    socket.on("upload-complete", () => {
-      console.log(`Total Received Size: ${receivedSize} bytes`);
-      socket.emit("upload-success", { receivedSize });
-    });
 });
 
 server.listen(port, () => {
