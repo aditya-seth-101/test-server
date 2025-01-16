@@ -25,9 +25,8 @@ io.on("connection", (socket) => {
 
   socket.on("upload-speed-test", (data) => {
     const startTime = Date.now();
-    const chunkSize = data.length; // Size of the data received
-    console.log("upload-speed-response triggererd");
-    // Simulate upload by echoing the data back
+    const chunkSize = data.byteLength || data.length ||0; // Size of the data received
+    // Simulate upload by echoing the data 
     socket.emit("upload-speed-response", { startTime, chunkSize });
   });
 
