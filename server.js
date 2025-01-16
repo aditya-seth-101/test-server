@@ -10,6 +10,8 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+const port = process.env.PORT || 8000
+
 
 // Chaos function to simulate latency and packet loss
 const introduceChaos = (callback) => {
@@ -45,8 +47,7 @@ io.on("connection", (socket) => {
     console.log(`Client reconnected on attempt ${attemptNumber}:`, socket.id);
   });
 });
-
-server.listen(8000, () => {
+server.listen(port, () => {
   console.log("Server is running on http://localhost:8080");
 });
 app.get("/", (req, res) => {
