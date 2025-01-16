@@ -26,6 +26,7 @@ io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
   socket.on("upload-test", (data) => {
+    console.log(data, "ddddd")
     const receivedSize = Buffer.byteLength(data, "utf8"); // Get the string size in bytes
     console.log(`Received ${receivedSize / 1024} KB from ${socket.id}`);
 
