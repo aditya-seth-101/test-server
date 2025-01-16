@@ -11,7 +11,7 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
-    maxHttpBufferSize: 1e8, 
+    maxHttpBufferSize: 1e10, 
   },
 });
 
