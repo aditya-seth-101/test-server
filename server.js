@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const path = require("path"); // Import path module
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,31 +19,25 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// Endpoint to handle the upload speed test
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
-  let packetsSent = 0;
-  let packetsReceived = 0;
+  socket.on("upload-speed-test", (data) => {
+    const startTime = Date.now();
+    const chunkSize = data.length; // Size of the data received
 
-  socket.on("ping-message", (sentTime) => {
-    packetsSent++;
-    // Introduce 200ms delay in sending pong-message
-    setTimeout(() => {
-      socket.emit("pong-message", sentTime);
-    }, 200); // 200ms delay
+    // Simulate upload by echoing the data back
+    socket.emit("upload-speed-response", { startTime, chunkSize });
   });
 
-  socket.on("pong-received", () => {
-    packetsReceived++;
-  });
+  socket.on("download-speed-test", () => {
+    const startTime = Date.now();
+    const chunk = Buffer.alloc(10 * 1024 * 1024); // 10MB chunk (you can adjust the size)
 
-  // Send packet loss stats every 5 seconds
-  setInterval(() => {
-    if (packetsSent > 0) {
-      const lossPercentage = ((packetsSent - packetsReceived) / packetsSent) * 100;
-      console.log(`Packet Loss: ${lossPercentage.toFixed(2)}%`);
-    }
-  }, 5000);
+    // Simulate download speed by sending a large chunk of data
+    socket.emit("download-speed-response", { startTime, chunk });
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(`Client disconnected (${socket.id}): ${reason}`);
