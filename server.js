@@ -11,7 +11,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-const port = process.env.PORT 
+const port = process.env.PORT  || 8000
 
 
 // Chaos function to simulate latency and packet loss
