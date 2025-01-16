@@ -11,7 +11,7 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
-    maxHttpBufferSize: 1e9, 
+    maxHttpBufferSize: 1e8, 
   },
 });
 
@@ -25,13 +25,12 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
-  socket.on("upload-test", (data) => {
-    console.log(data, "ddddd")
-    const receivedSize = Buffer.byteLength(data, "utf8"); // Get the string size in bytes
-    console.log(`Received ${receivedSize / 1024} KB from ${socket.id}`);
-
-    // Send back the data to test download speed
-    socket.emit("download-test", data);
+  socket.on("upload-speed-test", (data) => {
+    const startTime = Date.now();
+    const chunkSize = data?.byteLength || data?.length ||0; // Size of the data received
+    // Simulate upload by echoing the data 
+    console.log(chunkSize,"chunkSize")
+    socket.emit("upload-speed-response", { startTime, chunkSize });
   });
 
   socket.on("download-speed-test", () => {
