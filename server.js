@@ -27,7 +27,10 @@ io.on("connection", (socket) => {
 
   socket.on("ping-message", (sentTime) => {
     packetsSent++;
-    socket.emit("pong-message", sentTime);
+    // Introduce 200ms delay in sending pong-message
+    setTimeout(() => {
+      socket.emit("pong-message", sentTime);
+    }, 200); // 200ms delay
   });
 
   socket.on("pong-received", () => {
@@ -47,7 +50,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("reconnect", (attemptNumber) => {
-    console.log(`Client reconnected on attempt ${attemptNumber}: ${socket.id}`);
+    console.log(`Client reconnected on attempt ${attemptNumber}:`, socket.id);
   });
 });
 
