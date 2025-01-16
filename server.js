@@ -10,7 +10,7 @@ const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
-    transports: ["websocket", "polling"],
+    transports: ["websocket"],
     maxHttpBufferSize: 1e10, 
   },
 });
