@@ -50,15 +50,18 @@ io.on("connection", (socket) => {
   });
   let receivedSize = 0;
 
-  socket.on("upload-chunk", (chunk) => {
+  
+  socket.on("upload-chunk", ({ chunk }) => {
     receivedSize += chunk.length;
   });
 
-  socket.on("upload-complete", () => {
-    let x = receivedSize;
-    receivedSize = 0;
-    console.log(`Total Received Size: ${(x / 1048576).toFixed(2)} MB`);
-    socket.emit("upload-success", { x });
+  socket.on("upload-complete", ({ startTime }) => {
+    const endTime = Date.now();
+    const totalSize = receivedSize;
+    receivedSize = 0; // Reset for next test
+
+    console.log(`Total Received Size: ${(totalSize / 1048576).toFixed(2)} MB`);
+    socket.emit("upload-success", { totalSize, startTime, endTime });
   });
 });
 
