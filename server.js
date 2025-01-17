@@ -24,7 +24,29 @@ app.get("/", (req, res) => {
 // Endpoint to handle the upload speed test
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
+  let packetsSent = 0;
+  let packetsReceived = 0;
 
+  // ✅ Handle ping from client
+  socket.on("ping-message", (sentTime) => {
+    packetsSent++;
+    socket.emit("pong-message", sentTime);
+  });
+
+  
+  // ✅ Handle pong acknowledgment
+  socket.on("pong-received", () => {
+    packetsReceived++;
+  });
+
+  // ✅ Log packet loss statistics every 5 seconds
+  setInterval(() => {
+    if (packetsSent > 0) {
+      const lossPercentage = ((packetsSent - packetsReceived) / packetsSent) * 100;
+      console.log(`Packet Loss: ${lossPercentage.toFixed(2)}%`);
+    }
+  }, 5000);
+  
   socket.on("upload-speed-test", (data) => {
     const startTime = Date.now();
     const chunkSize = data?.byteLength || data?.length ||0; // Size of the data received
