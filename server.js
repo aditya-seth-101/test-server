@@ -27,14 +27,12 @@ io.on("connection", (socket) => {
   let packetsSent = 0;
   let packetsReceived = 0;
 
-  // ✅ Handle ping from client
   socket.on("ping-message", (sentTime) => {
     packetsSent++;
     socket.emit("pong-message", sentTime);
   });
 
-  
-  // ✅ Handle pong acknowledgment
+  // ✅ Acknowledge pong received
   socket.on("pong-received", () => {
     packetsReceived++;
   });
