@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
   socket.on("upload-complete", () => {
     let x = receivedSize;
     receivedSize = 0;
-    console.log(`Total Received Size: ${x} bytes`);
+    console.log(`Total Received Size: ${(x / 1048576).toFixed(2)} MB`);
     socket.emit("upload-success", { x });
   });
 });
